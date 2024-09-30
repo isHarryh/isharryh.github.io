@@ -1,0 +1,254 @@
+# Icarus theme configuration
+
+version: 5.1.0
+variant: default
+logo: ''
+
+# Page metadata configurations
+head:
+    favicon: /img/favicon.svg
+    # Web application manifests configuration
+    # https://developer.mozilla.org/en-US/docs/Web/Manifest
+    manifest:
+        name: Harry Huang
+        short_name: Harry Huang
+        start_url:
+        theme_color: '#F0F0F0'
+        background_color: '#F0F0F0'
+        display: standalone
+        icons:
+            -
+                src: ''
+                sizes: ''
+                type:
+    # Open Graph metadata
+    # https://hexo.io/docs/helpers.html#open-graph
+    open_graph:
+        title:
+        type: blog
+        url:
+        image:
+        site_name: Harry Huang
+        author: Harry Huang
+        description:
+        twitter_card:
+        twitter_id:
+        twitter_site:
+        google_plus:
+        fb_admins:
+        fb_app_id:
+    # Structured data of the page
+    # https://developers.google.com/search/docs/guides/intro-structured-data
+    structured_data:
+        title:
+        description:
+        url:
+        author: Harry Huang
+        publisher:
+        publisher_logo:
+        image:
+    # Additional HTML meta tags in an array
+    meta:
+        # Meta tag specified in <attribute>=<value> style
+        # E.g., name=theme-color;content=#123456 => <meta name="theme-color" content="#123456">
+        - ''
+    # URL or path to the website's RSS atom.xml
+    rss:
+
+# Page top navigation bar configurations
+navbar:
+    menu:
+        Home: /
+        Archives: /archives
+        Categories: /categories
+        Tags: /tags
+        # About: /about
+    links:
+        GitHub:
+            icon: fab fa-github
+            url: https://github.com/isHarryh
+
+# Page footer configurations
+footer:
+    copyright: ''
+    links:
+        CC BY-NC-SA 4.0:
+            icon: fab fa-creative-commons
+            url: https://creativecommons.org/licenses/by-nc-sa/4.0
+
+# Article related configurations
+article:
+    # Code highlight settings
+    highlight:
+        # Code highlight themes
+        # https://github.com/highlightjs/highlight.js/tree/master/src/styles
+        theme: atom-one-light
+        clipboard: true
+        fold: unfolded
+    readtime: true
+    update_time: auto
+    # Article licensing block
+    licenses:
+        CC BY-NC-SA 4.0:
+            icon: fab fa-creative-commons
+            url: https://creativecommons.org/licenses/by-nc-sa/4.0
+
+# Search plugin configurations
+# https://ppoffice.github.io/hexo-theme-icarus/categories/Plugins/Search/
+search:
+    type: insight
+
+# Comment plugin configurations
+# https://ppoffice.github.io/hexo-theme-icarus/categories/Plugins/Comment/
+# comment:
+
+# Donate plugin configurations
+# https://ppoffice.github.io/hexo-theme-icarus/categories/Plugins/Donation/
+# donates:
+
+# Share plugin configurations
+# https://ppoffice.github.io/hexo-theme-icarus/categories/Plugins/Share/
+# share:
+
+# Sidebar configurations.
+# Please be noted that a sidebar is only visible when it has at least one widget
+sidebar:
+    left:
+        sticky: false
+    right:
+        sticky: true
+
+# Sidebar widget configurations
+# http://ppoffice.github.io/hexo-theme-icarus/categories/Widgets/
+widgets:
+    # Profile widget configurations
+    -
+        position: left
+        type: profile
+        author: Harry Huang
+        author_title:
+        location: China
+        avatar:
+        avatar_rounded: true
+        gravatar:
+        follow_link:
+        social_links:
+            Github:
+                icon: fab fa-github
+                url: https://github.com/isHarryh
+            Bilibili:
+                icon: fab fa-bilibili
+                url: https://space.bilibili.com/491926230
+            # Facebook:
+            # Twitter:
+            # Dribbble:
+            # RSS:
+    # Categories widget configurations
+    -
+        position: left
+        type: categories
+    # Archives widget configurations
+    -
+        position: left
+        type: archives
+    # Tags widget configurations
+    -
+        position: left
+        type: tags
+        order_by: name
+        amount:
+        show_count: true
+    # Recommendation links widget configurations
+    -
+        position: left
+        type: links
+        links:
+            ArkPets: https://arkpets.harryh.cn/?from=blog
+    # Table of contents widget configurations
+    -
+        position: right
+        type: toc
+        index: true
+        collapsed: true
+        depth: 3
+    # Recent posts widget configurations
+    -
+        position: right
+        type: recent_posts
+    # Google FeedBurner email subscription widget configurations
+    # - Disabled
+    # Google AdSense unit configurations
+    # - Disabled
+    # Follow.it email subscription widget configurations
+    # - Disabled
+
+# Plugin configurations
+# https://ppoffice.github.io/hexo-theme-icarus/categories/Plugins/
+plugins:
+    # Enable page startup animations
+    animejs: true
+    # Show the "back to top" button
+    back_to_top: true
+    # Baidu Analytics plugin settings
+    # https://tongji.baidu.com
+    baidu_analytics:
+        tracking_id:
+    # Bing Webmaster Tools plugin settings
+    # https://www.bing.com/toolbox/webmaster/
+    bing_webmaster:
+        tracking_id:
+    # BuSuanZi site/page view counter
+    # https://busuanzi.ibruce.info
+    busuanzi: true
+    # CNZZ statistics
+    # https://www.umeng.com/web
+    cnzz:
+        id:
+        web_id:
+    # Alerting users about the use of cookies
+    # https://www.osano.com/cookieconsent/
+    cookie_consent:
+        type: info
+        theme: edgeless
+        static: false
+        position: bottom-left
+        policyLink: https://www.cookiesandyou.com/
+    # Enable the lightGallery and Justified Gallery plugins
+    gallery: true
+    # Google Analytics plugin settings
+    # https://analytics.google.com
+    google_analytics:
+        tracking_id:
+    # Hotjar user feedback plugin
+    # https://www.hotjar.com/
+    hotjar:
+        site_id:
+    # Enable the KaTeX math typesetting support
+    # https://katex.org/
+    katex: true
+    # Enable the MathJax math typesetting support
+    # https://www.mathjax.org/
+    mathjax: false
+    # Enable the Outdated Browser plugin
+    # http://outdatedbrowser.com/
+    outdated_browser: true
+    # Enable PJAX
+    pjax: true
+    # Show a progress bar at top of the page on page loading
+    progressbar: true
+    # Statcounter statistics
+    # https://statcounter.com/
+    statcounter:
+        project:
+        security:
+    # Twitter conversion tracking plugin settings
+    # https://business.twitter.com/en/help/campaign-measurement-and-analytics/conversion-tracking-for-websites.html
+    twitter_conversion_tracking:
+        pixel_id:
+
+# CDN provider settings
+# https://ppoffice.github.io/hexo-theme-icarus/Configuration/icarus-user-guide-cdn-providers/
+providers:
+    cdn: cdnjs
+    fontcdn: ustc
+    iconcdn: fontawesome
