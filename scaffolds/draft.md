@@ -1,6 +1,5 @@
 ---
 title: {{ title }}
-categories:
-  - [Draft]
+categories: [Draft]
 tags: []
 ---

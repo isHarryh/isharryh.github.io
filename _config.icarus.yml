@@ -6,7 +6,7 @@ logo: ''
 
 # Page metadata configurations
 head:
-    favicon: /img/favicon.svg
+    favicon: /imgs/Avatar.png
     # Web application manifests configuration
     # https://developer.mozilla.org/en-US/docs/Web/Manifest
     manifest:
@@ -18,9 +18,9 @@ head:
         display: standalone
         icons:
             -
-                src: ''
-                sizes: ''
-                type:
+                src: /imgs/Avatar.png
+                sizes: 32x32 64x64 128x128 256x256
+                type: image/png
     # Open Graph metadata
     # https://hexo.io/docs/helpers.html#open-graph
     open_graph:
@@ -128,7 +128,7 @@ widgets:
         author: Harry Huang
         author_title:
         location: China
-        avatar:
+        avatar: /imgs/Avatar.png
         avatar_rounded: true
         gravatar:
         follow_link:

@@ -1,8 +1,7 @@
 ---
 title: {{ title }}
 toc: true
-categories:
-  - [Misc]
+categories: [Misc]
 tags: []
 date: {{ date }}
 ---
