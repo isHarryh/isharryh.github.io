@@ -104,3 +104,8 @@ deploy:
   type: git
   repo: https://github.com/isHarryh/isharryh.github.io
   branch: gh-pages
+
+# Markdown images
+marked:
+  prependRoot: true
+  postAsset: true

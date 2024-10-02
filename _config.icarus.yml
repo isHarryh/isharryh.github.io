@@ -86,7 +86,7 @@ article:
         clipboard: true
         fold: unfolded
     readtime: true
-    update_time: false
+    update_time: auto
     # Article licensing block
     licenses:
         CC BY-NC-SA 4.0:
