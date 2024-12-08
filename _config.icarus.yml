@@ -64,9 +64,9 @@ navbar:
         Tags: /tags
         # About: /about
     links:
-        GitHub:
-            icon: fab fa-github
-            url: https://github.com/isHarryh
+        # GitHub:
+        #     icon: fab fa-github
+        #     url: https://github.com/isHarryh
 
 # Page footer configurations
 footer:
@@ -164,6 +164,7 @@ widgets:
         type: links
         links:
             ArkPets: https://arkpets.harryh.cn/?from=blog
+            Litwak.913: https://litwak913.github.io
     # Table of contents widget configurations
     -
         position: right
