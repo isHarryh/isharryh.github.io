@@ -105,6 +105,8 @@ class B extends A {
 
 ## 多态
 
+> 猫和狗都是“动物”，而“动物”都有“吃”这一动作。但是，猫和狗各有各的“吃”法。这就是“动物”的多态的一种体现。
+
 ### 多态方法
 
 C++ 使用 `virtual` 关键字，显式声明一个多态方法（称作**虚函数**）。当且仅当一个方法被 `virtual` 关键字修饰时，才允许它在派生类中被“显式覆写”。而 Java 的所有非静态方法都默认是多态方法，*无需*用 `virtual` 显式声明即可被覆写。
@@ -154,6 +156,121 @@ class B extends A {
 
     @Override // Okay (recommended)
     public int fun2() { return 222; }
+}
+```
+
+### 菱形继承
+
+> **菱形继承**指的是派生类 B 和 C 同时继承了基类 A，而最终派生类 D 又继承了 B 和 C。继承关系的拓扑示意如下：
+> 
+> ```txt
+>    A     <-- Base class
+>  /   \
+> B     C  <-- Derived class
+>  \   /
+>    D     <-- Final derived class
+> ```
+> 
+> 此时，如果某个字段在类 A 中被声明，那么类 D 中可能会存在分别来自类 B 和类 C 的两份独立的字段，谓之**数据冗余问题**。
+> 
+> 另外，如果某个可继承的方法在类 A 中被声明，那么类 D 不知道应该采用类 B 所继承的方法还是类 C 所继承的方法，谓之**二义性问题**。
+
+为了解决菱形继承带来的问题，C++ 和 Java 分别采用了不同的解决方案。
+
+C++ 使用**虚拟继承**的机制，保证了最终派生类只存在一份基类的成员拷贝。
+
+以下代码演示了 C++ 如何触发菱形继承问题：
+
+```cpp
+#include <iostream>
+using namespace std;
+
+class A {
+public:
+    int value;
+    void display() { cout << "Class A" << endl; }
+};
+
+class B : public A { };
+class C : public A { };
+
+class D : public B, public C { };
+
+int main() {
+    D obj;
+    obj.display(); // Error
+    obj.B::display(); // Okay
+    obj.C::display(); // Okay
+
+    obj.value = 10; // Error
+    obj.B::value = 10; // Okay
+    obj.C::value = 20; // Okay
+    cout << obj.B::value << endl; // Got 10
+    cout << obj.C::value << endl; // Got 20
+
+    return 0;
+}
+```
+
+以下代码演示了 C++ 如何使用虚拟继承来解决菱形继承问题：
+
+```cpp
+#include <iostream>
+using namespace std;
+
+class A {
+public:
+    int value;
+    void display() { cout << "Class A" << endl; }
+};
+
+class B : virtual public A { }; // Important
+class C : virtual public A { }; // Important
+
+class D : public B, public C { };
+
+int main() {
+    D obj;
+    obj.display(); // Okay
+
+    obj.value = 10; // Okay
+    cout << obj.value << endl; // Got 10
+
+    return 0;
+}
+```
+
+如果基类 A 的方法是虚方法，而派生类 B 和 C 各自对它有不同的实现，那么此时需要在最终派生类 D 中手动指定到底采用谁的实现。以下代码演示了这一过程：
+
+```cpp
+#include <iostream>
+using namespace std;
+
+class A {
+public:
+    virtual void display() { cout << "Class A" << endl; }
+};
+
+class B : virtual public A {
+public:
+    void display() override { cout << "Class B" << endl; }
+};
+
+class C : virtual public A {
+public:
+    void display() override { cout << "Class C" << endl; }
+};
+
+class D : public B, public C {
+public:
+    // Explicitly choose one implementation
+    void display() override { B::display(); }
+};
+
+int main() {
+    D obj;
+    obj.display(); // Okay
+    return 0;
 }
 ```
 
@@ -209,6 +326,7 @@ C++ 主要有三种创建对象的方式。
 
 1. **动态对象**：通过 `new` 关键字手动分配对象内存，并通过 `delete` 关键字手动释放。
     > 需要注意，此时得到的是对象指针（用 `->` 访问成员）而非对象（用 `.` 访问成员）。
+
     ```cpp
     A* a = new A();
     a->fun();
