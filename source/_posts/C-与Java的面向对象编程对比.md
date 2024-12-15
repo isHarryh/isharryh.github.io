@@ -5,7 +5,7 @@ categories:
   - Programming
 tags: [C++, Java]
 date: 2024-12-13 18:30:00
-updated: 2024-12-14 13:26:00
+updated: 2024-12-16 1:27:00
 ---
 
 C++ 与 Java 的面向对象编程具有相似性，但也有显著的区别。本文旨在帮助掌握了 Java 的人学习 C++ 面向对象，以及帮助掌握了 C++ 面向对象的人学习 Java。
@@ -175,11 +175,7 @@ class B extends A {
 > 
 > 另外，如果某个可继承的方法在类 A 中被声明，那么类 D 不知道应该采用类 B 所继承的方法还是类 C 所继承的方法，谓之**二义性问题**。
 
-为了解决菱形继承带来的问题，C++ 和 Java 分别采用了不同的解决方案。
-
-C++ 使用**虚拟继承**的机制，保证了最终派生类只存在一份基类的成员拷贝。
-
-以下代码演示了 C++ 如何触发菱形继承问题：
+以下代码演示了在 C++ 中如何引发菱形继承问题：
 
 ```cpp
 #include <iostream>
@@ -193,7 +189,6 @@ public:
 
 class B : public A { };
 class C : public A { };
-
 class D : public B, public C { };
 
 int main() {
@@ -207,35 +202,30 @@ int main() {
     obj.C::value = 20; // Okay
     cout << obj.B::value << endl; // Got 10
     cout << obj.C::value << endl; // Got 20
-
     return 0;
 }
 ```
 
-以下代码演示了 C++ 如何使用虚拟继承来解决菱形继承问题：
+为了解决菱形继承带来的问题，C++ 和 Java 分别采用了不同的解决方案。
+
+#### C++ 虚拟继承
+
+C++ 使用**虚拟继承**的机制，保证了最终派生类只存在一份基类的成员拷贝。虚拟继承的语法就是用 `virtual` 修饰继承方式。
+
+以下代码演示了在 C++ 中如何使用虚拟继承来解决菱形继承问题：
 
 ```cpp
-#include <iostream>
-using namespace std;
-
-class A {
-public:
-    int value;
-    void display() { cout << "Class A" << endl; }
-};
+// ...
 
 class B : virtual public A { }; // Important
 class C : virtual public A { }; // Important
-
 class D : public B, public C { };
 
 int main() {
     D obj;
-    obj.display(); // Okay
-
-    obj.value = 10; // Okay
+    obj.display();
+    obj.value = 10;
     cout << obj.value << endl; // Got 10
-
     return 0;
 }
 ```
@@ -263,16 +253,81 @@ public:
 
 class D : public B, public C {
 public:
-    // Explicitly choose one implementation
+    // Explicitly choose one
     void display() override { B::display(); }
 };
 
 int main() {
     D obj;
-    obj.display(); // Okay
+    obj.display(); // Got "Class B"
     return 0;
 }
 ```
+
+#### Java 接口
+
+Java 的类**不允许多继承**，从而在设计层面规避了菱形继承的问题。但是 Java 提供了一种**接口**机制，使得我们可以利用“多接口”来实现“多继承”。
+
+接口是一种特殊的类型，用于定义行为规范。接口中所有方法一定是 `public` 方法，并且接口的实例方法都默认是 `abstract` 方法。接口不能实例化，必须由类来实现。
+
+以下代码演示了 Java 的多接口（不同的接口或类应该定义在不同的文件中，这里我们将其合并展示）：
+
+```java
+interface A {
+    void funA();
+}
+
+interface B extends A {
+    void funB();
+}
+
+interface C extends A {
+    void funC();
+}
+
+// Class can implement multi interfaces
+// Note that we use `implements` here
+class D implements B, C {
+    // Now implement funA, funB, funC
+    // void funA() { ... }
+    // void funB() { ... }
+    // void funC() { ... }
+}
+
+// Interface can do that too
+interface D extends A, B {
+    void funD();
+}
+```
+
+可以发现，接口机制将方法的“实现”（方法体）给隐去了，只有方法的“签名”（方法声明）被继承了下来。于是，类 D 中的 `funA` 并不会发生实现上的冲突，类 D 只需要对“需要实现的方法”进行实现即可。
+
+> 自 Java 8 起：
+> 
+> - 接口可以提供静态方法（使用 `static` 修饰）。它无法被继承，只能通过接口名调用。通常我们会用静态方法作为工具方法来使用。
+> - 接口可以提供默认实现（使用 `default` 修饰）。在这种情况下，仍可能造成菱形继承的二义性问题。此时无法通过编译，开发者需要手动解决冲突。示例如下：
+> 
+>   ```java
+>   interface A {
+>       default void display() {
+>           System.out.println("Hello A");
+>       }
+>   }
+> 
+>   interface B {
+>       default void display() {
+>           System.out.println("Hello B");
+>       }
+>   }
+> 
+>   class C implements A, B {
+>       @Override
+>       public void display() {
+>           // Explicitly choose one
+>           A.super.display();
+>       }
+>   }
+>   ```
 
 ### 抽象方法
 
