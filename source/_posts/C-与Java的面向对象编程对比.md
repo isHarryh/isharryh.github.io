@@ -5,7 +5,7 @@ categories:
   - Programming
 tags: [C++, Java]
 date: 2024-12-13 18:30:00
-updated: 2024-12-16 1:27:00
+updated: 2024-12-18 17:40:00
 ---
 
 C++ 与 Java 的面向对象编程具有相似性，但也有显著的区别。本文旨在帮助掌握了 Java 的人学习 C++ 面向对象，以及帮助掌握了 C++ 面向对象的人学习 Java。
@@ -373,9 +373,9 @@ class B extends A {
 }
 ```
 
-## 内存管理
+## 对象生命周期
 
-### 对象创建
+### 内存分配
 
 C++ 主要有三种创建对象的方式。
 
@@ -421,7 +421,122 @@ C++ 主要有三种创建对象的方式。
 
 Java 是**自动内存管理**——由垃圾回收器（GC）自动管理对象的分配和释放，不需要手动管理内存。
 
-### 对象销毁
+### 构造函数
+
+**构造函数**是对象在被初始化时所自动调用的函数。C++ 与 Java 中的构造函数存在一些不同之处。
+
+#### 初始化列表
+
+C++ 提供**初始化列表**这一写法来简化成员变量的初始化，但 Java 没有这种写法。
+
+> 初始化列表跟随在构造函数签名后面，并由冒号 `:` 引导。以下代码是初始化列表的写法示例：
+> ```cpp
+> // Person class
+> Person(string name) : name(name), age(1) {
+>     // ...
+> }
+> ```
+> 它的执行效果类似于以下代码：
+> ```cpp
+> // Person class
+> Person(string name) {
+>     this->name = name;
+>     this->age = 1;
+>     // ...
+> }
+> ```
+> 初始化列表还避免了“先默认构造再赋值”的性能开销，是 C++ 中的一种高效的初始化成员变量的方法。
+
+#### 自身构造函数委托
+
+Java 支持在构造函数体内使用 `this(...)` 来调用（或者说**委托**）本类的其他构造函数，它必须是构造函数的第一条语句。
+
+C++ 不能像 Java 一样在构造函数体内调用其他构造函数。但是自 C++ 11 起，支持在初始化列表中调用其他构造函数。需要注意，一旦采用了这种写法，就不能在初始化列表中有其他初始化表达式了。
+
+**语法示例：**
+
+```cpp
+// C++
+class Person {
+public:
+    Person(string name, int age) : Person(name) {
+        this->age = age;
+    }
+
+    Person(string name) {
+        this->name = name;
+    }
+private:
+    string name;
+    int age;
+};
+```
+
+```java
+// Java
+class Person {
+    private String name;
+    private int age;
+
+    public Person(String name, int age) {
+        this(name);
+        this.age = age;
+    }
+
+    public Person(String name) {
+        this.name = name;
+    }
+}
+```
+
+#### 基类构造函数委托
+
+Java 支持在构造函数体内使用 `super(...)` 来调用基类的构造函数，它必须是构造函数的第一条语句。
+
+C++ 则需要在初始化列表的开头调用它们。
+
+**语法示例：**
+
+```cpp
+// C++
+class Book {
+public:
+    Book(string title, int category) {
+        this->title = title;
+        this->category = category;
+    }
+protected:
+    string title;
+    int category;
+};
+
+class Novel : public Book {
+public:
+    Novel(string title) : Book(title, 123) {
+    }
+};
+```
+
+```java
+// Java
+class Book {
+    protected String title;
+    protected int category;
+
+    public Book(String title, int category) {
+        this.title = title;
+        this.category = category;
+    }
+}
+
+class Novel extends Book {
+    public Novel(String title) {
+        super(title, 123);
+    }
+}
+```
+
+### 析构函数
 
 C++ 支持显式定义**析构函数**，用于在对象销毁时释放资源（比如动态申请的内存空间）。
 
