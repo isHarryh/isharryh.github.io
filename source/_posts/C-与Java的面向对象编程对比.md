@@ -5,7 +5,7 @@ categories:
   - Programming
 tags: [C++, Java]
 date: 2024-12-13 18:30:00
-updated: 2024-12-31 21:10:00
+updated: 2025-1-3 23:13:00
 ---
 
 C++ 与 Java 的面向对象编程具有相似性，但也有显著的区别。本文旨在帮助掌握了 Java 的人学习 C++ 面向对象，以及帮助掌握了 C++ 面向对象的人学习 Java。
@@ -444,6 +444,62 @@ C++ 和 Java 中都有下列三类构造函数：
 
 仅在 C++ 中，如果没有定义任何拷贝构造函数（和移动构造函数），编译器会自动提供一个默认的拷贝构造函数。
 
+**语法示例：**
+
+```cpp
+// C++
+class A {
+private:
+    int x;
+    string name;
+
+public:
+    A() {
+        this->x = 0;
+        this->name = "Unknown";
+        cout << "Default constructor" << endl;
+    }
+
+    A(int x, const string& name) {
+        this->x = x;
+        this->name = name;
+        cout << "Parameterized constructor" << endl;
+    }
+
+    A(const A& other) {
+        this->x = other.x;
+        this->name = other.name;
+        cout << "Copy constructor" << endl;
+    }
+};
+```
+
+```java
+// Java
+public class A {
+    private int x;
+    private String name;
+
+    public A() {
+        this.x = 0;
+        this.name = "Unknown";
+        System.out.println("Default constructor");
+    }
+
+    public A(int x, String name) {
+        this.x = x;
+        this.name = name;
+        System.out.println("Parameterized constructor");
+    }
+
+    public A(A other) {
+        this.x = other.x;
+        this.name = other.name;
+        System.out.println("Copy constructor");
+    }
+}
+```
+
 #### 初始化列表
 
 C++ 提供**初始化列表**这一写法来简化成员变量的初始化，但 Java 没有这种写法。
@@ -557,6 +613,68 @@ class Novel extends Book {
 
 ### 析构函数
 
-C++ 支持显式定义**析构函数**，它在对象销毁时（比如对象离开作用域或者被显式删除时）被自动调用，常用于释放资源（比如动态申请的内存空间）。
+C++ 支持显式定义**析构函数**，它在对象销毁时（比如对象离开作用域或者被显式删除时）被自动调用，常用于释放资源（比如动态申请的内存空间）。析构函数的名称是“波浪号`~`+类名”。
 
-Java 没有析构函数，但是可以使用 `finalize()`（已过时）或实现 `AutoCloseable` 来清理资源。
+Java 没有析构函数，但是有两种方式实现类似于析构函数的功能。
+
+1. （已过时）覆写继承自 `Object` 基类的 `finalize()` 方法。该函数会在对象被垃圾回收（GC）时调用。但是由于 Java 的 GC 的时机具有不确定性，因此该函数具有可靠性缺陷，不推荐使用。
+2. 实现 `AutoCloseable` 接口（主要是实现一个 `close()` 方法）。实现了这个接口的类的对象可以被放在 `try-with-resources` 语句中，从而简洁地管理资源的释放。
+
+> 自 Java 7 起，支持使用 `try-with-resources` 语句来自动管理资源，从而确保在程序执行完成后，资源（如文件句柄、网络连接等）能被正确地关闭。该语句需要资源对象实现 `AutoCloseable` 接口，以便在 `try` 块结束后（无论是否发生异常）自动调用资源的 `close()` 方法。
+
+**语法示例：**
+
+```cpp
+class A {
+private:
+    int* data1;
+    float* data2;
+
+public:
+    A() : data1(new int[100]), data2(new float[100]) {
+        cout << "Object constructed" << endl;
+    }
+
+    ~A() {
+        // Release resource here
+        delete[] data1;
+        delete[] data2;
+        cout << "Resource released" << endl;
+    }
+};
+
+int main() {
+    {
+        A obj1;
+        // Case 1: Reached the end of the scope
+    }
+
+    A* obj2 = new A();
+    delete obj2; // Case 2: Explicit deletion
+
+    return 0;
+}
+```
+
+```java
+// Java
+public class A implements AutoCloseable {
+    public A() {
+        System.out.println("Object constructed");
+    }
+
+    @Override
+    public void close() {
+        // Release resource here
+        System.out.println("Resource released");
+    }
+
+    public static void main(String[] args) {
+         // Use try-with-resources
+        try (A obj1 = new A()) {
+            // Do something here
+        }
+        System.out.println("End of main()");
+    }
+}
+```
