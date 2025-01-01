@@ -1,5 +1,5 @@
 ---
-title: C++与Java的面向对象编程对比
+title: C++与Java的面向对象编程串讲
 toc: true
 categories:
   - Programming
