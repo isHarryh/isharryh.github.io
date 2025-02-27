@@ -5,7 +5,7 @@ categories:
   - CS
 tags: [日志, 操作系统]
 date: 2025-02-26 21:22:00
-updated: 2025-02-26 21:22:00
+updated: 2025-02-27 12:53:00
 ---
 
 本文是作者自用的 Ubuntu 操作系统（版本 24.04）服务器的一次开荒记录。
@@ -169,3 +169,98 @@ ClientAliveCountMax 30
 sudo adduser newuser
 sudo usermod -aG sudo newuser
 ```
+
+### 安装运行环境
+
+以下列举了一些运行环境的安装步骤。
+
+#### Java
+
+安装指定版本（以 v17.x 为例）的 Java JDK：
+
+```bash
+sudo apt install -y openjdk-17-jdk
+```
+
+```bash
+java --version
+```
+
+#### Node.js
+
+安装指定版本（以 v22.x 为例）的 Node.js 运行时：
+
+```bash
+curl -fsSL https://deb.nodesource.com/setup_22.x | sudo -E bash -
+sudo apt install -y nodejs
+```
+
+```bash
+node --version
+npm --version
+```
+
+#### Python
+
+自行编译指定版本（以 v3.8.20 为例）的 Python 运行时：
+
+```bash
+sudo apt install -y build-essential libssl-dev zlib1g-dev libbz2-dev \
+                    libreadline-dev libsqlite3-dev wget curl llvm \
+                    libncurses5-dev libncursesw5-dev xz-utils tk-dev \
+                    libffi-dev liblzma-dev python3-openssl git
+```
+
+```bash
+mkdir ~/python38
+cd ~/python38
+wget https://www.python.org/ftp/python/3.8.20/Python-3.8.20.tgz
+tar -xf Python-3.8.20.tgz
+```
+
+```bash
+cd Python-3.8.20
+./configure --enable-optimizations
+make -j$(nproc)
+sudo make install
+```
+
+```bash
+python3.8 --version
+```
+
+### 配置命令别名
+
+有时为了方便，会给某些命令设置别名（Alias），以便快捷调用。
+
+#### 临时别名
+
+临时别名只在当前终端会话中有效，终端关闭后会失效。可直接在命令行中使用 `alias` 设置临时别名（例如将 `gs` 设置为 `git status` 的一个别名）：
+
+```bash
+alias gs='git status'
+```
+
+#### 永久别名
+
+永久别名会生效于所有终端会话中，直到手动删除。这就需要将别名添加到用户的配置文件中。对于 `bash` 用户，编辑 `.bashrc` 文件：
+
+```bash
+nano ~/.bashrc
+```
+
+> 如果是 `zsh` 用户，所有针对 `.bashrc` 文件的操作都替换成 `.zshrc` 的即可。
+
+在配置文件中新增一行，添加你需要的别名，例如：
+
+```bash
+alias gs='git status'
+```
+
+保存并退出文件后，执行以下命令使配置生效：
+
+```bash
+source ~/.bashrc
+```
+
+> 可以直接使用不带参数的 `alias` 命令查看当前会话中已设置的所有别名。
