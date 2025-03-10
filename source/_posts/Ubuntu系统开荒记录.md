@@ -3,9 +3,9 @@ title: Ubuntu系统开荒记录
 toc: true
 categories:
   - CS
-tags: [日志, 操作系统]
+tags: [运维, 操作系统, 数据库]
 date: 2025-02-26 21:22:00
-updated: 2025-02-27 12:53:00
+updated: 2025-03-10 22:56:00
 ---
 
 本文是作者自用的 Ubuntu 操作系统（版本 24.04）服务器的一次开荒记录。
@@ -264,3 +264,105 @@ source ~/.bashrc
 ```
 
 > 可以直接使用不带参数的 `alias` 命令查看当前会话中已设置的所有别名。
+
+## 常见应用场景
+
+### 数据库
+
+数据库主要分为关系型数据（SQL）和非关系型数据库（NoSQL）。主流的数据库列表格如下：
+
+| 数据库 | 类型 | 适用场景 | 主要特点 |
+|---|---|---|---|
+| **MySQL** | SQL | 传统网站 | 最流行的 SQL 数据库 |
+| **SQLite** | SQL | 轻量级应用 | 文件数据库 |
+| **PostgreSQL** | SQL | 企业级应用 | 支持复杂查询和高扩展性 |
+| **MongoDB** | NoSQL | 实时应用，API 驱动 | 灵活的 JSON-like 文档存储 |
+| **Redis** | NoSQL | 实时应用，缓存 | 内存数据库 |
+
+下面详细讲解 PostgreSQL 的部署步骤。
+
+#### PostgreSQL 安装
+
+[PostgreSQL](https://www.postgresql.org/) 是比 MySQL 更强大的关系型数据库。
+
+
+安装 PostgreSQL：
+
+```bash
+sudo apt update
+sudo apt install postgresql postgresql-contrib -y
+```
+
+调整 PostgreSQL 的性能配置：
+
+```bash
+sudo nano /etc/postgresql/版本号/main/postgresql.conf
+```
+
+修改共享内存大小 `shared_buffers` 为合理的数值（建议设为可用内存的 25%），修改最大连接数 `max_connections` 为合理的数值。
+
+确保 PostgreSQL 已启动且已设置开机自启动：
+
+```bash
+sudo systemctl start postgresql
+sudo systemctl enable postgresql
+sudo systemctl status postgresql
+```
+
+#### PostgreSQL Hello World
+
+以下内容演示了最基本的 PostgreSQL 命令行交互操作。
+
+首先，切换到 PostgreSQL 提供的默认用户 `postgres`：
+
+```bash
+sudo -i -u postgres
+```
+
+然后，进入 PSQL 命令行模式：
+
+```bash
+psql
+```
+
+> 这会默认连接到内建数据库 `postgres`。在 PSQL 模式下，命令提示符形如 `xxx=#`，其中 `xxx` 是当前所在的数据库名称。
+
+运行 Hello World 示例：
+
+1. 在 PSQL 模式下，创建新数据库：
+   ```sql
+   CREATE DATABASE hello_world_db;
+   ```
+2. 连接到该数据库：
+   ```txt
+   \c hello_world_db
+   ```
+3. 创建数据表：
+   ```sql
+   CREATE TABLE my_users (
+       id SERIAL PRIMARY KEY,
+       name VARCHAR(100) NOT NULL
+   );
+   ```
+4. 插入数据：
+   ```sql
+   INSERT INTO my_users (name) VALUES ('Alice');
+   INSERT INTO my_users (name) VALUES ('Bob');
+   ```
+5. 查询数据：
+   ```sql
+   SELECT * FROM my_users;
+   ```
+6. 列出当前数据库中的所有数据表：
+   ```sql
+   \dt
+   ```
+7. 删库跑路（需要先连接回默认数据库 `postgres`）：
+   ```sql
+   \c postgres
+   ```
+   ```sql
+   DROP DATABASE hello_world_db;
+   ```
+
+> 如需退出 PSQL 模式，运行 `\q` 即可。如需从 PostgreSQL 用户切换回原来的用户，运行 `exit` 即可。
