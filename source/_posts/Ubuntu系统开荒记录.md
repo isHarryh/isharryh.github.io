@@ -5,7 +5,7 @@ categories:
   - CS
 tags: [Linux, 服务器, 数据库]
 date: 2025-02-26 21:22:00
-updated: 2025-03-13 22:14:00
+updated: 2025-03-13 22:35:00
 ---
 
 本文是作者自用的 Ubuntu 操作系统（版本 24.04）服务器的一次开荒记录。
@@ -35,7 +35,7 @@ sudo apt update && sudo apt upgrade -y
 sudo apt dist-upgrade -y
 ```
 
-> `sudo` 是“superuser do”的缩写，可以临时授权当前用户以其他用户的身份（默认 root）来执行命令，是一种提权操作。
+> `sudo` 指的是“superuser do”，即临时授权当前用户以其他用户的身份（默认 root）来执行命令。
 
 > `apt` 指的是 Advanced Package Tool，用于自动化管理软件包。
 
@@ -198,8 +198,10 @@ ssh-copy-id -i ~/.ssh/id_rsa.pub <用户名>@<服务器地址>
 > echo "<公钥内容>" >> ~/.ssh/authorized_keys
 > chmod 600 ~/.ssh/authorized_keys
 > ```
+> 
+> 务必确保 `authorized_keys` 文件的所有者是当前用户（可使用 `chown` 命令修改所有者），且文件权限是 `600` 即 `-rw-------`。文件权限和所有者可以使用 `ls -l` 命令查看。
 
-打开 SSH 配置文件，修改以下参数：
+打开 SSH 配置文件，修改以下参数（开启密钥对登录，并禁止密码登录）：
 
 ```ini
 PubkeyAuthentication yes
@@ -218,7 +220,7 @@ ssh -i <私钥路径> <用户名>@<服务器地址>
 
 > 若私钥文件在本地保存到了默认路径，例如 `~/.ssh/id_rsa`，则可以省略 `-i <私钥路径>` 参数。
 
-### 创建新用户
+### 创建用户
 
 出于安全考虑，应该尽可能避免使用 root 用户进行常规操作。我们可以创建一个新的管理员用户：
 
@@ -228,6 +230,72 @@ sudo usermod -aG sudo newuser
 ```
 
 为新用户重复一遍密钥对配置流程，即可使用密钥对登录。
+
+要想查看当前登录的用户名，运行：
+
+```bash
+whoami
+```
+
+### 用户组操作
+
+对用户权限的管理，主要是对用户组的管理。
+
+创建用户组：
+
+```bash
+sudo groupadd 用户组名
+```
+
+将用户加入到用户组（不影响用户的主组）：
+
+```bash
+sudo usermod -aG 用户组名 用户名
+```
+
+修改用户的主组：
+
+```bash
+sudo usermod -g 用户组名 用户名
+```
+
+查看指定用户所属的用户组：
+
+```bash
+groups 用户名
+```
+
+锁定用户（禁止登录）：
+
+```bash
+sudo usermod -L 用户名
+```
+
+解锁用户：
+
+```bash
+sudo usermod -U 用户名
+```
+
+### 借取其他用户权限
+
+在当前用户拥有 `sudo` 权限的情况下，可以用其他用户的身份来运行命令：
+
+```bash
+sudo -u 用户名 命令
+```
+
+> 未提供 `-u` 参数时，就默认是以 root 身份运行命令。
+
+如果需要执行较多命令，可以直接登录到其他用户：
+
+```bash
+su - 用户名
+```
+
+> `-` 是 `-l` 即 `--login` 的缩写。
+
+使用 `exit` 即可返回原先的用户。
 
 ## 应用程序
 
