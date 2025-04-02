@@ -41,6 +41,8 @@ sudo systemctl status nginx
 
 以下内容演示了如何利用 Nginx 在本地的 80 端口部署一个简易的**静态网站**。
 
+<!-- more -->
+
 首先，创建一个静态 HTML 文件：
 
 ```bash
