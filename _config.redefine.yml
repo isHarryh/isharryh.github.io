@@ -209,6 +209,12 @@ navbar:
     Archives:
       path: /archives
       icon: fa-regular fa-archive # can be empty
+    Tags:
+      path: /tags
+      icon: fa-regular fa-tags # can be empty
+    Categories:
+      path: /categories
+      icon: fa-regular fa-folder # can be empty
     Links:
       icon: fa-regular fa-link
       submenus:
@@ -235,15 +241,9 @@ home:
     announcement: # Announcement text
     show_on_mobile: true # Whether to show sidebar navigation on mobile sheet menu
     links:
-      # Archives:
-      #   path: /archives
-      #   icon: fa-regular fa-archive # can be empty
-      Tags:
-        path: /tags
-        icon: fa-regular fa-tags # can be empty
-      Categories:
-        path: /categories
-        icon: fa-regular fa-folder # can be empty
+      GitHub:
+        path: https://github.com/isHarryh
+        icon: fa-brands fa-github
   # Article date format
   article_date_format: auto # auto, relative, YYYY-MM-DD, YYYY-MM-DD HH:mm:ss etc.
   # Article excerpt length
