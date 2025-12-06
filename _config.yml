@@ -109,3 +109,13 @@ deploy:
 marked:
   prependRoot: true
   postAsset: true
+
+# MathJax settings
+## Docs: https://redefine-docs.ohevan.com/en/plugins/mathjax
+mathjax:
+    tags: none # 'ams' or 'all'
+    single_dollars: true
+    cjk_width: 0.9
+    normal_width: 0.6
+    append_css: true
+    every_page: true
