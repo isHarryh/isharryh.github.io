@@ -788,7 +788,7 @@ unsigned char key[32] = {
 
 以下是使用 Nano Banana 绘制的 BLC 数据结构图，可供参考：
 
-![Arknights Endfield CBT3 BLC Structure](./BLC.png)
+![Arknights Endfield CBT3 BLC Structure](./BLC.jpg)
 
 为了方便起见，我对某些哈希字段的读取方式进行了如下调整：
 
