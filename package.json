@@ -9,11 +9,10 @@
     "server": "hexo server"
   },
   "hexo": {
-    "version": "7.3.0"
+    "version": "8.1.1"
   },
   "dependencies": {
-    "bulma-stylus": "^0.8.0",
-    "hexo": "^7.3.0",
+    "hexo": "^8.1.1",
     "hexo-component-inferno": "^3.1.2",
     "hexo-filter-mathjax": "^0.9.1",
     "hexo-filter-mermaid-diagrams": "^1.0.5",
