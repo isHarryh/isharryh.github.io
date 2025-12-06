@@ -216,11 +216,8 @@ navbar:
       path: /categories
       icon: fa-regular fa-folder # can be empty
     Links:
-      icon: fa-regular fa-link
-      submenus:
-        GitHub: https://github.com/isHarryh
-        ArkPets: https://arkpets.harryh.cn/?from=blog
-        "@Litwak.913": https://litwak913.github.io
+      path: /links
+      icon: fa-regular fa-link # can be empty
   # Navbar search (local search). Requires hexo-generator-searchdb (npm i hexo-generator-searchdb). See https://github.com/theme-next/hexo-generator-searchdb
   search:
     # Whether to enable

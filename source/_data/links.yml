@@ -1,0 +1,21 @@
+- links_category: My Friends
+  has_thumbnail: false
+  list:
+    - name: Litwak.913
+      link: https://litwak913.github.io/
+      description: ''
+      avatar: https://avatars.githubusercontent.com/u/67425064
+- links_category: My Projects
+  has_thumbnail: false
+  list:
+    - name: ArkPets
+      link: https://arkpets.harryh.cn/?from=blog
+      description: Arknights Desktop Pets
+      avatar: https://ghproxy.harryh.cn/https://raw.githubusercontent.com/isHarryh/Ark-Pets/v3.x/assets/icons/icon.png
+- links_category: My Sponsors
+  has_thumbnail: false
+  list:
+    - name: Mirror Chyan
+      link: https://mirrorchyan.com/
+      description: Open-source Application Distribution Platform
+      avatar: https://ghproxy.harryh.cn/https://raw.githubusercontent.com/isHarryh/mirrorchyan-frontend/refs/heads/dev/src/app/favicon.ico
