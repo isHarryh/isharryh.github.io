@@ -6,7 +6,7 @@ categories:
 tags: [逆向工程]
 date: 2025-12-05 17:09:00
 updated: 2025-12-05 17:09:00
-thumbnail: /Reverse-Engineering/《终末地》CBT3逆向工程1：VFS资源存储解密/BLC.jpg
+thumbnail: /Reverse-Engineering/Endfield-CBT3-Reverse-Engineering-1-VFS-Storage-Decryption/BLC.jpg
 ---
 
 本文记录了我对 Unity 游戏《明日方舟：终末地》（简称《终末地》）全面测试版本中的 VFS 资源存储逻辑的逆向工程过程。主要介绍了如何通过对反编译代码的静态分析，结合调试器的动态分析，解析《终末地》的 VFS 资源存储格式，并实现解析工具。
