@@ -24,6 +24,7 @@
     "hexo-renderer-stylus": "^3.0.1",
     "hexo-server": "^3.0.0",
     "bulma-stylus": "^0.8.0",
+    "hexo-theme-redefine": "^2.8.5",
     "semver": "^7.7.3"
   }
 }
