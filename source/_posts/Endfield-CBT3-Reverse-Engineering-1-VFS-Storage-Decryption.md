@@ -5,7 +5,7 @@ categories:
   - Reverse Engineering
 tags: [逆向工程]
 date: 2025-12-05 17:09:00
-updated: 2025-12-05 17:09:00
+updated: 2025-12-07 10:57:00
 thumbnail: /Reverse-Engineering/Endfield-CBT3-Reverse-Engineering-1-VFS-Storage-Decryption/BLC.jpg
 ---
 
@@ -659,6 +659,8 @@ VFBlockMainInfo *Beyond::VFS::VFSUtils::DecryptCreateBlockGroupInfo(
 
 因此，关键是要找到**密钥**。
 
+事实上，它们的 ChaCha20 算法 `Beyond::XXEnc::XXE1` 的内部本身也引入了若干常量，这里暂不进行展开介绍。
+
 ### 利用调试获取 BLC 密钥
 
 在阅读 `GetCommonChachaKeyBs` 函数的代码后，我发现生成密钥的算法过于复杂，涉及多种拼接和转换操作。因此我们选择通过**动态分析**的方式，使用调试器在运行时直接获取密钥。
@@ -863,8 +865,156 @@ unsigned char key[32] = {
 
 根据 BLC 文件中记录的 `offset` 和 `len`，我们就可以从 CHK 文件中提取出每个虚拟文件的原始数据了，然后根据文件格式进行后续处理。
 
-需要注意的是，这里的 `bUseEncrypt` 字段并不表示虚拟文件的原本内容是否被加密，而是表示该文件在 CHK 文件中是否被**二次加密**。通常而言，如果虚拟文件本身是非二进制格式（例如 `.json` 和 `.lua`），那么它在 CHK 文件中通常会被二次加密；而如果虚拟文件本身已经是加密或压缩后的格式（例如 `.ab` 和 `.pck`），那么它在 CHK 文件中通常不会被二次加密。
+需要注意的是，这里的 `bUseEncrypt` 字段并不表示虚拟文件的原本内容是否被加密，而是表示该文件在 CHK 文件中是否被**外层加密**。通常而言，如果虚拟文件本身是非二进制格式（例如 `.json` 和 `.lua`），那么它在 CHK 文件中通常会被外层加密；而如果虚拟文件本身已经是加密或压缩后的格式（例如 `.ab` 和 `.pck`），那么它在 CHK 文件中通常不会被外层加密。
 
-### 深入探究 CHK 的二次加密
+### 深入探究 CHK 的外层加密
 
-待续...
+为了将外层加密后的虚拟文件进行解密，我们可以在 `GameAssembly.dll` 中搜索与 `bUseEncrypt` 相关的代码片段，最终排查到以下函数：
+
+```cpp
+// FVFSTrackedLowIOHandle(FVFBlockFileInfo&, Boolean)
+void Beyond::VFS::FVFSTrackedLowIOHandle::FVFSTrackedLowIOHandle(
+    FVFSTrackedLowIOHandle *this,
+    FVFBlockFileInfo *info,
+    bool async,
+    MethodInfo *method)
+{
+    String *ChunkFileRedirectedLoaderPath;
+    bool isEnc;
+    int64_t len, offset, ivSeed;
+    struct VFSDefine__Class *_ZN8TypeInfo6Beyond3VFS9VFSDefineE;
+    unsigned __int64 BLOCK_HEAD_LEN, KEY_LEN;
+    Span_1_Byte_ *p_nonce, *p_key, *CommonChachaKeyBs, key_1, key_ivSeed_1, v63, key, key_ivSeed, v71, v73;
+    struct VFSDefine__StaticFields *static_fields;
+    ReadOnlySpan_1_Byte_ nonce__1, nonce__2, key__3, nonce_, key__1;
+    XXE1 *m_xxe1_1;
+    FVFSUntrackedLowIOReadHandle v67;
+
+    // ...
+    ChunkFileRedirectedLoaderPath = Beyond::VFS::FVFBlockFileInfo::GetChunkFileRedirectedLoaderPath(info, 0);
+    // ...
+    if (ChunkFileRedirectedLoaderPath && ChunkFileRedirectedLoaderPath->fields._stringLength)
+    {
+        isEnc = info->bUseEncrypt;
+        len = info->len;
+        offset = info->offset;
+        memset(&v67, 0, sizeof(v67));
+        Beyond::VFS::FVFSUntrackedLowIOReadHandle::FVFSUntrackedLowIOReadHandle(
+            &v67,
+            ChunkFileRedirectedLoaderPath,
+            offset,
+            len,
+            async,
+            isEnc,
+            0);
+        // ...
+        _ZN8TypeInfo6Beyond3VFS9VFSDefineE = TypeInfo::Beyond::VFS::VFSDefine;
+        // ...
+        BLOCK_HEAD_LEN = _ZN8TypeInfo6Beyond3VFS9VFSDefineE->static_fields->BLOCK_HEAD_LEN;
+        if (BLOCK_HEAD_LEN)
+        {
+            // ...
+            p_nonce = &key_1;
+        }
+        else
+        {
+            p_nonce = 0;
+        }
+        sub_7FFCE0DDB400(p_nonce, 0, BLOCK_HEAD_LEN);
+        // ...
+        if (BLOCK_HEAD_LEN < 4)
+            goto LABEL_69;
+        *(&key_1._length + 1) = 0;
+        // ...
+        key_1._pointer._value = p_nonce;
+        key_1._length = 4;
+        static_fields = TypeInfo::Beyond::VFS::VFSDefine->static_fields;
+        key = key_1;
+        sub_7FFCE31DD900(&key, static_fields->VFS_PROTO_VERSION);
+        if ((BLOCK_HEAD_LEN - 4) < 8)
+            goto LABEL_69;
+        *(&key_ivSeed_1._length + 1) = 0;
+        // ...
+        ivSeed = info->ivSeed;
+        key_ivSeed_1._pointer._value = &p_nonce->_pointer._value + 4;
+        key_ivSeed_1._length = 8;
+        key_ivSeed = key_ivSeed_1;
+        sub_7FFCE31DD9E0(&key_ivSeed, ivSeed);
+        KEY_LEN = TypeInfo::Beyond::VFS::VFSDefine->static_fields->KEY_LEN;
+        if (KEY_LEN)
+        {
+            // ...
+            p_key = &key_1;
+        }
+        else
+        {
+            p_key = 0;
+        }
+        sub_7FFCE0DDB400(p_key, 0, KEY_LEN);
+        *(&v63._length + 1) = 0;
+        // ...
+        if ((KEY_LEN & 0x80000000) != 0LL)
+        LABEL_69:
+            System::ThrowHelper::ThrowArgumentOutOfRangeException(0);
+        v63._pointer._value = p_key;
+        v63._length = KEY_LEN;
+        // ...
+        v71 = v63;
+        CommonChachaKeyBs = Beyond::VFS::VirtualFileSystem::GetCommonChachaKeyBs(&v73, &v71, 0);
+        // ...
+        *(&key__3._length + 1) = 0;
+        nonce__1 = *CommonChachaKeyBs;
+        // ...
+        nonce_ = nonce__1;
+        // ...
+        key__3._pointer._value = nonce_._pointer._value;
+        // ...
+        key__3._length = nonce__1._length;
+        *(&nonce__2._length + 1) = 0;
+        // ...
+        nonce__2._pointer._value = p_nonce;
+        nonce__2._length = BLOCK_HEAD_LEN;
+        m_xxe1_1 = sub_7FFCE0D21D80(TypeInfo::Beyond::XXEnc::XXE1);
+        // ...
+        if (m_xxe1_1)
+        {
+            nonce_ = nonce__2;
+            key__1 = key__3;
+            Beyond::XXEnc::XXE1::XXE1(m_xxe1_1, &key__1, &nonce_, 1u, 0);
+            // ...
+            return;
+        }
+    LABEL_70:
+        sub_7FFCE0DC3430();
+    }
+    // ...
+}
+```
+
+可以发现，外层加密的解密过程与 BLC 的解密过程非常类似，依然是使用 ChaCha20 算法进行解密。相同之处是，它们都使用了同一个密钥（通过 `GetCommonChachaKeyBs` 函数获取）；不同之处在于，外层加密的解密所需的 **nonce** 需要通过以下方式来拼接：
+
+- 前 4 Bytes 是将 BLC 文件的 `version`（代码中的 `VFS_PROTO_VERSION` 常量）进行转换后的结果（进一步分析显示，这种转换是将 `version` 转换为小端序 4 Bytes 字节）；
+- 接下来的 8 Bytes 是将虚拟文件的 `ivSeed` 进行转换后的结果（进一步分析显示，这种转换也是小端序转换）；
+
+~~CHK 解密，轻而易举啊。~~ 完美！根据这些信息，就可以顺利地将所有虚拟文件都还原出来了。
+
+### 下一步...
+
+我很快地将各类虚拟文件进行了提取，并做了简单的分析：
+
+1. `.usm` 文件未见修改，可以直接用相关工具进行解码，得到视频；
+2. `.pck` 文件不是常规的格式，且极有可能本身被加密；
+3. `.ab` 文件不是常规的格式，且极有可能本身被加密；
+4. BundleManifest 类别只有一个文件 `manifest.hgmmap`，是自定义格式，推测是某种索引文件；
+5. DynamicStreaming 和 Streaming 类别可能与某些高性能的流式加载有关，包括但不限于游戏场景的加载；
+6. Table 类别可能与游戏数据表有关，是自定义格式；
+7. IV 类别的全称是 Irradiance Volume，可能与光照有关；
+8. JsonData 类别的文件存疑；
+9. Lua 类别的文件存储着 Base64 字符串，且可能被加密；
+10. ExtendData 类别只有一个文件 `InitStringPathHash.bin`，是自定义格式。
+
+我们可以发现，鹰角网络对《终末地》测试版的资源保护机制做得非常完善——不仅对游戏文件做了虚拟化，还对各种类别的游戏资源都做了**不同的**格式自定义或加密处理，甚至连虚拟文件系统本身（BLC 与 CHK 文件）都设有处心积虑的加密，极大地增加了逆向工程的难度。
+
+下一步，我会优先想要研究 `.pck` 和 `.ab` 文件的加密方式（因为包含主要的音频和美术资源）。
+
+至此，本文就先告一段落，感谢阅读！也感谢 UnityPy 社区的各位朋友提供的帮助！
