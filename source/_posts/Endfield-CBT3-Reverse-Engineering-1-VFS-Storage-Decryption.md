@@ -5,11 +5,11 @@ categories:
   - Reverse Engineering
 tags: [逆向工程]
 date: 2025-12-05 17:09:00
-updated: 2025-12-07 10:57:00
+updated: 2025-12-07 17:33:00
 thumbnail: /Reverse-Engineering/Endfield-CBT3-Reverse-Engineering-1-VFS-Storage-Decryption/BLC.jpg
 ---
 
-本文记录了我对 Unity 游戏《明日方舟：终末地》（简称《终末地》）全面测试版本中的 VFS 资源存储逻辑的逆向工程过程。主要介绍了如何通过对反编译代码的静态分析，结合调试器的动态分析，解析《终末地》的 VFS 资源存储格式，并实现解析工具。
+本文记录了我对 Unity 游戏[《明日方舟：终末地》](https://endfield.hypergryph.com/)（简称《终末地》）全面测试版本中的 VFS 资源存储逻辑的逆向工程过程。主要介绍了如何通过对反编译代码的静态分析，结合调试器的动态分析，解析《终末地》的 VFS 资源存储格式，并实现解析工具。
 
 ## 前言
 
@@ -27,7 +27,7 @@ thumbnail: /Reverse-Engineering/Endfield-CBT3-Reverse-Engineering-1-VFS-Storage-
 
 ### 初步分析
 
-《终末地》是基于 Unity 2021 开发的跨平台游戏，使用了 **il2cpp** 作为脚本后端。游戏在发行时分为了中国版（CN）和海外版（OS）两个版本进行分发。游戏的资源文件采用了自定义的 VFS（虚拟文件系统，Virtual File System）进行存储，并且对资源数据进行了加密处理。
+《终末地》是基于 [Unity 2021.3](https://docs.unity3d.com/2021.3/Documentation/Manual/) 开发的跨平台游戏，使用了 **il2cpp** 作为脚本后端。游戏在发行时分为了中国版（CN）和海外版（OS）两个版本进行分发。游戏的资源文件采用了自定义的 VFS（虚拟文件系统，Virtual File System）进行存储，并且对资源数据进行了加密处理。
 
 游戏文件在文件系统中的存储结构是：
 
@@ -56,8 +56,8 @@ EndFieldTBeta2_Data/
 
 对 CHK 文件进行二进制检视，发现：
 
-- `55FC21C6` 目录下的文件的开头始终为 `CRID`，说明是 Criware USM 文件（进行常规 USM 文件解码后可正常获得视频资源，表明此类文件未加密）。
-- `07A1BB91` 等若干目录下的文件的开头始终为 `:)xD`，考虑是某种自定义的资源包。
+- `55FC21C6` 目录下的文件的开头始终为 `CRID`，说明是 [Criware](https://game.criware.jp/) USM 文件（进行常规 USM 文件解码后可正常获得视频资源，表明此类文件未加密）。
+- `07A1BB91` 等若干目录下的文件的开头始终为 `:)xD`，考虑是某种自定义的资源包（事后确认是加密后的 [AK](https://www.audiokinetic.com/) Package）。
 - 其余目录下的文件开头均无显著特征，且香农熵大部分为 8.00，少部分低于 4，表明这些资源大部分是加密资源。在部分加密文件中，搜索到 `2021.3.34f5` 字符串，很可能是 Unity 引擎的版本号。
 
 要想弄清楚这些加密资源是什么，我们需要从 BLC 文件入手，尝试解析其内容。
@@ -68,7 +68,7 @@ EndFieldTBeta2_Data/
 
 ### 准备 global-metadata
 
-若直接使用 IDA Pro 对其进行反编译，得到的结果是没有任何符号信息的汇编代码，难以阅读和分析。为此，我们需要获取一个记录了符号信息的 `global-metadata.dat` 文件，并使用 Il2cppInspector 工具对 il2cpp 程序进行**符号化处理**，才能在 IDA Pro 中降低分析的难度。
+若直接使用 [IDA Pro](https://hex-rays.com/ida-pro) 对其进行反编译，得到的结果是没有任何符号信息的汇编代码，难以阅读和分析。为此，我们需要获取一个记录了符号信息的 `global-metadata.dat` 文件，并使用 Il2cppInspector 工具对 il2cpp 程序进行**符号化处理**，才能在 IDA Pro 中降低分析的难度。
 
 当我们打开 CN Win 和 OS Win 版本的 `global-metadata.dat` 文件时，发现该文件的内容是：
 
@@ -95,14 +95,14 @@ T_T T_T
 由于原来的 Il2cppInspector 项目已于 2021 年停止维护，这里我们使用的是 [LukeFZ 维护的 Il2cppInspector](https://github.com/LukeFZ/Il2CppInspectorRedux)。运行以下命令行：
 
 ```bash
-.\Il2CppInspector.exe process -m "path\to\global-metadata.dat" -i "path\to\libil2cpp.so" --unity-version 2021.3.31f5 -t IDA
+.\Il2CppInspector.exe process -m "path\to\global-metadata.dat" -i "path\to\libil2cpp.so" --unity-version 2021.3.34f5 -t IDA
 ```
 
 我们就可以生成供 IDA Pro 使用的符号化文件，包括：`dll` 文件夹，`cpp` 文件夹，`metadata.json` 文件，`types.cs` 文件和 `il2cpp.py` 文件。
 
 ### 使用 IDA Pro 进行符号化的反编译
 
-接下来，在 IDA Pro 中打开 `GameAssembly.dll` 文件，并在菜单栏的 `Files -> Run Script` 中选择 `il2cpp.py` 脚本运行。这一过程可能需要较长时间。脚本运行完成后，便可以在伪代码试图中阅读到符号化的 C++ 代码了。
+接下来，在 IDA Pro 中打开 `GameAssembly.dll` 文件，并在菜单栏的 `File -> Script file` 中选择 `il2cpp.py` 脚本运行。这一过程可能需要较长时间。脚本运行完成后，便可以在伪代码试图中阅读到符号化的 C++ 代码了。
 
 ## 分析 VFS 相关代码
 
@@ -650,18 +650,16 @@ VFBlockMainInfo *Beyond::VFS::VFSUtils::DecryptCreateBlockGroupInfo(
 }
 ```
 
-容易从代码中发现，BCL 文件使用了 [ChaCha20 加密算法](https://datatracker.ietf.org/doc/html/rfc7539#page-10)。解密函数 `Beyond::XXEnc::XXE1::XXE1` 需要输入 4 个参数：
+容易从代码中发现，BCL 文件使用了 [ChaCha20 加密算法](https://datatracker.ietf.org/doc/html/rfc7539)。解密函数 `Beyond::XXEnc::XXE1::XXE1` 需要输入 4 个参数：
 
-- input（加密数据），整个文件；
-- key（解密密钥），通过 `Beyond::VFS::VirtualFileSystem::GetCommonChachaKeyBs` 函数获取；
-- nonce（有时称作 iv），是数据的前 `KEY_LEN` Bytes，查找发现 `KEY_LEN` 常量的值是 12；
-- count（初始计数），固定是 1。
+- **input**（加密数据），整个文件的数据；
+- **key**（解密密钥），通过 `Beyond::VFS::VirtualFileSystem::GetCommonChachaKeyBs` 函数获取；
+- **nonce**（有时称作 iv），是数据的前 `KEY_LEN` Bytes，查找发现 `KEY_LEN` 常量的值是 12；
+- **count**（初始计数），固定是 1。
 
 因此，关键是要找到**密钥**。
 
-事实上，它们的 ChaCha20 算法 `Beyond::XXEnc::XXE1` 的内部本身也引入了若干常量，这里暂不进行展开介绍。
-
-### 利用调试获取 BLC 密钥
+### 获取 Chacha20 密钥
 
 在阅读 `GetCommonChachaKeyBs` 函数的代码后，我发现生成密钥的算法过于复杂，涉及多种拼接和转换操作。因此我们选择通过**动态分析**的方式，使用调试器在运行时直接获取密钥。
 
@@ -725,7 +723,7 @@ Stack[00004058]:00000009A64EEC0E db  52h ; R
 Stack[00004058]:00000009A64EEC0F db 0E1h
 ```
 
-并且，这个密钥在每个 BLC 被解密时都是相同的，可以推测所有的 BLC 文件都能用它来进行解密。我们可以将其整理为十六进制字节数组：
+我们可以将其整理为十六进制字节数组：
 
 ```cpp
 unsigned char key[32] = {
@@ -746,14 +744,26 @@ unsigned char key[32] = {
 
 ### 解析 BLC 文件
 
-至此，我们已经掌握了 BLC 文件的解密方法和数据结构定义，接下来我们就可以实现一个简单的 BLC 解析工具。具体的代码就在此省略了。
+至此，我们已经掌握了 BLC 文件的解密方法和数据结构定义，接下来我们就可以实现一个简单的 BLC 解析工具。解析工具的具体代码就在此省略了。
 
 此外，在实际操作过程中发现一些细节问题：
 
 1. 解密后的 BLC 文件的 `version` 后面（也就是 `groupCfgName` 前面）还存在 12 Bytes 的未知数据，在解析时应该跳过；
-2. `groupCfgHashName` 的长度是 8 Bytes，但是它的有效数据只有 4 Bytes，因此后续的 4 Bytes 可以跳过。
+2. `groupCfgHashName` 的长度是 8 Bytes，但是它的有效数据只有 4 Bytes，因此后面 4 Bytes 可以跳过；
+3. 如果你正在使用 Python 的 [pycryptodome](https://github.com/Legrandin/pycryptodome) 提供的 Chacha20 解密函数来进行解密，你会发现它的解密函数并没有传入 counter 这个参数（在它的实现里面，counter 参数是固定为 0 的）。根据 Chacha20 的原理，我们只需要将密钥流跳过 64 Bytes 即可等效地实现 counter 参数值为 1 的效果（示例代码如下）。
+   ```python
+   from Crypto.Cipher import ChaCha20
 
-最终，我成功对 19 个 BLC 文件进行了解析。以下是其中一个已解析的 BLC 文件的 `VFBlockMainInfo` JSON 示例：
+   CHACHA_KEY = b"\xe9[1z\xc4\xf8(V\x9d#\xa8k\xf2q\xdc\xb5>\x84o\xa7\\\x92Mg\x1d\xba\x8e8\xf4\xcaR\xe1"
+   # nonce = ...
+   # data = ...
+
+   cipher = ChaCha20.new(key=CHACHA_KEY, nonce=nonce)
+   cipher.seek(64)
+   decrypted_data = cipher.decrypt(data)
+   ```
+
+最终，我成功对 19 个 BLC 文件进行了解析。以下是其中一个已解析的 BLC 文件的 `VFBlockMainInfo` JSON 序列化示例：
 
 ```json
 {
@@ -998,7 +1008,7 @@ void Beyond::VFS::FVFSTrackedLowIOHandle::FVFSTrackedLowIOHandle(
 
 ~~CHK 解密，轻而易举啊。~~ 完美！根据这些信息，就可以顺利地将所有虚拟文件都还原出来了。
 
-### 下一步...
+### 下一步
 
 我很快地将各类虚拟文件进行了提取，并做了简单的分析：
 
@@ -1008,12 +1018,14 @@ void Beyond::VFS::FVFSTrackedLowIOHandle::FVFSTrackedLowIOHandle(
 4. BundleManifest 类别只有一个文件 `manifest.hgmmap`，是自定义格式，推测是某种索引文件；
 5. DynamicStreaming 和 Streaming 类别可能与某些高性能的流式加载有关，包括但不限于游戏场景的加载；
 6. Table 类别可能与游戏数据表有关，是自定义格式；
-7. IV 类别的全称是 Irradiance Volume，可能与光照有关；
+7. IV 类别的全称是 Irradiance Volume，与光照有关；
 8. JsonData 类别的文件存疑；
 9. Lua 类别的文件存储着 Base64 字符串，且可能被加密；
 10. ExtendData 类别只有一个文件 `InitStringPathHash.bin`，是自定义格式。
 
-我们可以发现，鹰角网络对《终末地》测试版的资源保护机制做得非常完善——不仅对游戏文件做了虚拟化，还对各种类别的游戏资源都做了**不同的**格式自定义或加密处理，甚至连虚拟文件系统本身（BLC 与 CHK 文件）都设有处心积虑的加密，极大地增加了逆向工程的难度。
+需要注意的是，本文是针对《终末地》**CBT3** 进行的分析，而游戏正式版的资源存储逻辑可能会与此不同，因此需要注意以上信息的时效性。
+
+我们可以发现，鹰角网络对《终末地》CBT3 的资源保护机制做得非常完善——不仅对游戏文件做了虚拟化，还对各种类别的游戏资源都做了**不同的**格式自定义或加密处理，甚至连虚拟文件系统本身（BLC 与 CHK 文件）都设有处心积虑的加密，极大地增加了逆向工程的难度。
 
 下一步，我会优先想要研究 `.pck` 和 `.ab` 文件的加密方式（因为包含主要的音频和美术资源）。
 
