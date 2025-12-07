@@ -100,7 +100,7 @@ global:
   open_graph:
     enable: true
     image: /images/redefine-og.webp  # default og:image
-    description: Hexo Theme Redefine, Redefine Your Hexo Journey.
+    description: Welcome to Harry Huang's Blog Site.
   # Google Analytics
   google_analytics:
     enable: false # Whether to enable Google Analytics
@@ -131,8 +131,8 @@ home_banner:
   style: fixed # static or fixed
   # Home banner image
   image:
-    light: /images/wallhaven-wqery6-light.webp # light mode
-    dark: /images/wallhaven-wqery6-dark.webp # dark mode
+    light: /images/Background-Light.jpg
+    dark: /images/Background-Dark.jpg
   # Home banner title
   title: Hi, I'm Harry Huang
   # Home banner subtitle
@@ -151,8 +151,8 @@ home_banner:
     smart_backspace: true # Whether to smart backspace
   # Color of home banner text
   text_color:
-    light: "#ffffff" # light mode
-    dark: "#e4e4c6" # dark mode
+    light: "#82ecc8"
+    dark: "#62ce86"
   # Specific style of the text
   text_style:
     # Title font size
@@ -399,11 +399,11 @@ footer:
 # Docs: https://redefine-docs.ohevan.com/inject
 inject:
   # Whether to enable inject
-  enable: false
+  enable: true
   # Inject custom head html code
   head:
-    -
-    -
+    - '<style>.home-banner-container .description{text-shadow:0 0 8px #000;background-color:#4442;backdrop-filter:blur(4px)}</style>'
+    - '<style>.home-banner-container .justify-between{padding:0 8vw}</style>'
   # Inject custom footer html code
   footer:
     -
