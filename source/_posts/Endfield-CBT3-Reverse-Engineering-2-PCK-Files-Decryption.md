@@ -873,7 +873,7 @@ AKRESULT_0 __fastcall CAkFilePackageLUT::Setup(CAkFilePackageLUT *this, AkUInt8 
 
 不难发现，这意味着 `in_pData` 的前 28 Bytes 是固定的结构。`in_pData[3]`、`in_pData[4]`、`in_pData[5]` 和 `in_pData[6]` 分别存储了四个子表的字节长度。紧接着的就是四个子表的数据，依次是 `m_pLangMap`、`m_pSoundBanks`、`m_pStmFiles` 和 `m_pExternals`。
 
-然而，按照这样的方法去读取 PCK 头部，我发现很多特征都无法与之对应。可能是我的分析存在问题，或者有一些未被注意到的点。因此，LUT 的结构暂时不能用于解析 PCK 头部。
+然而，按照这样的方法去读取 PCK 头部，我发现很多特征都无法与之对应。可能是我的分析存在问题，或者有一些未被注意到的点。因此，暂时不能根据这个代码来分析 PCK 头部的格式。
 
 ## 解析 PCK 文件头部
 
@@ -911,7 +911,7 @@ AKRESULT_0 __fastcall CAkFilePackageLUT::Setup(CAkFilePackageLUT *this, AkUInt8 
 00000048  39 09 00 00  |9...|
 ```
 
-接下来是一些看起来像是**文件条目**的数据 $E$，它们以 **5 Word**（20 Bytes）为一组，且第 2 个 Word 和第 5 个 Word（$E[1]$ 和 $E[4]$）都始终为 1：
+接下来是一些看起来像是**文件条目**的数据 $E$，它们以 **5 Word**（20 Bytes）为一组，且第 2 个 Word（$E[1]$）始终为 1，第 5 个 Word（$E[4]$）始终为 1 或 0。示例如下：
 
 ```
 0000004C  ED 7C 02 00  |.|..|
@@ -951,7 +951,7 @@ AKRESULT_0 __fastcall CAkFilePackageLUT::Setup(CAkFilePackageLUT *this, AkUInt8 
 0000B8C0  D5 39 00 00  |.9..|
 ```
 
-接下来又是一些看起来像是**文件条目**的数据 $E'$，但是和先前的区别在于，这些条目以 **6 Word**（24 Bytes）为一组，并且 $E[2]$ 始终为 1，$E[5]$ 始终为 0：
+接下来又是一些看起来像是**文件条目**的数据 $E'$，但是和先前的区别在于，这些条目以 **6 Word**（24 Bytes）为一组。示例如下：
 
 ```
 0000B8C4  E1 45 F2 B2  |.E..|
@@ -1064,11 +1064,11 @@ def get_entries(...) -> Generator[Tuple[int, int, int, int, int], None, None]:
 
 ### 解密已提取的音频文件
 
-至此，我们已经能够从 PCK 文件中提取出所有音频文件了。
-
 以下是使用 Nano Banana 绘制的 BLC 数据结构图，可供参考：
 
 ![Arknights Endfield CBT3 PCK Structure](./PCK.jpg)
+
+至此，我们已经能够从 PCK 文件中根据头部信息的指引，提取出所有音频文件了。
 
 当然，这些音频文件暂时还是加密的。我们可以合理地怀疑，这些音频文件的解密方法和 PCK 文件头部的**解密方法是相同的**。经过测试，发现只需要将 `DecipherInPlace` 函数中的 `seed` 参数设为**音频文件的 ID**，即可正确地解密音频文件了。
 
