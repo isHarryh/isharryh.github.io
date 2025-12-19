@@ -3,7 +3,7 @@ title: 《终末地》CBT3逆向工程1：VFS资源存储解密
 toc: true
 categories:
   - Reverse Engineering
-tags: [逆向工程]
+tags: [逆向工程, 密码学, 反编译, Unity]
 date: 2025-12-05 17:09:00
 updated: 2025-12-07 17:33:00
 thumbnail: /Reverse-Engineering/Endfield-CBT3-Reverse-Engineering-1-VFS-Storage-Decryption/BLC.jpg
@@ -31,13 +31,13 @@ thumbnail: /Reverse-Engineering/Endfield-CBT3-Reverse-Engineering-1-VFS-Storage-
 
 游戏文件在文件系统中的存储结构是：
 
-```txt
+```
 EndFieldTBeta2_Data/
 |- index_initial.json
 |- index_main.json
 |- VFS/
    |- 07A1BB91/
-   |- 07A1BB91.blc
+   |  |- 07A1BB91.blc
    |  |- 24F006196A004C8E3A259EADA8F45818.chk
    |  |- 69B1B82E779ECFD39DD0B4F94EAFB39D.chk
    |- 0CE8FA57/
@@ -57,7 +57,7 @@ EndFieldTBeta2_Data/
 对 CHK 文件进行二进制检视，发现：
 
 - `55FC21C6` 目录下的文件的开头始终为 `CRID`，说明是 [Criware](https://game.criware.jp/) USM 文件（进行常规 USM 文件解码后可正常获得视频资源，表明此类文件未加密）。
-- `07A1BB91` 等若干目录下的文件的开头始终为 `:)xD`，考虑是某种自定义的资源包（事后确认是加密后的 [AK](https://www.audiokinetic.com/) Package）。
+- `07A1BB91` 等若干目录下的文件的开头始终为 `:)xD`，考虑是某种自定义的资源包（事后确认是加密后的 [AudioKinetic](https://www.audiokinetic.com/) Package）。
 - 其余目录下的文件开头均无显著特征，且香农熵大部分为 8.00，少部分低于 4，表明这些资源大部分是加密资源。在部分加密文件中，搜索到 `2021.3.34f5` 字符串，很可能是 Unity 引擎的版本号。
 
 要想弄清楚这些加密资源是什么，我们需要从 BLC 文件入手，尝试解析其内容。
@@ -72,7 +72,7 @@ EndFieldTBeta2_Data/
 
 当我们打开 CN Win 和 OS Win 版本的 `global-metadata.dat` 文件时，发现该文件的内容是：
 
-```txt
+```
 T_T T_T
 ```
 
@@ -688,7 +688,7 @@ Span_1_Byte_ *Beyond::VFS::VirtualFileSystem::GetCommonChachaKeyBs(
 
 断点命中后，我们发现 `v28` 指向一个长度为 32 Bytes 的数据区域，其内容如下所示：
 
-```txt
+```
 Stack[00004058]:00000009A64EEBF0 db 0E9h
 Stack[00004058]:00000009A64EEBF1 db  5Bh ; [
 Stack[00004058]:00000009A64EEBF2 db  31h ; 1
