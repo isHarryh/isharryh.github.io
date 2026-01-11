@@ -3,7 +3,7 @@ title: 计算机发展简史
 toc: true
 categories:
   - CS
-tags: [笔记]
+tags: [课程]
 date: 2024-10-01 12:23:00
 updated: 2024-10-02 18:57:00
 ---

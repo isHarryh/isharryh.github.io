@@ -3,7 +3,7 @@ title: 高等数学（上）知识框架
 toc: true
 categories:
   - Maths
-tags: [笔记, 微积分]
+tags: [课程, 数学]
 date: 2025-01-04 11:36:00
 updated: 2025-01-06 16:05:00
 ---

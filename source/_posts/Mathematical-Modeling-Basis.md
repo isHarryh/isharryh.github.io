@@ -3,7 +3,7 @@ title: 数学建模基础
 toc: true
 categories:
   - Misc
-tags: [笔记, 数学建模]
+tags: [课程, 数学建模]
 date: 2026-01-11 21:27:00
 updated: 2026-01-11 21:27:00
 ---

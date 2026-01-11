@@ -11,6 +11,8 @@ thumbnail: /Reverse-Engineering/Endfield-CBT3-Reverse-Engineering-2-PCK-Files-De
 
 本文记录了我对 Unity 游戏[《明日方舟：终末地》](https://endfield.hypergryph.com/)（简称《终末地》）全面测试版本中的 **PCK 文件**的逆向工程过程。
 
+<!-- more -->
+
 ## 前言
 
 ### 关于 PCK 文件
@@ -664,7 +666,7 @@ goto LABEL_19;
 
 #### Part D：解密尾部残余的 Bytes
 
-最后需要处理的是尾部可能剩余的 1\~3 Bytes。这一部分的代码的逻辑存在一写令人费解的分支，但总体思路就是直接使用最后一个残缺 Word 的密钥，按字节对应地、依次地对剩余的 1\~3 Bytes 进行解密。
+最后需要处理的是尾部可能剩余的 1\~3 Bytes。这一部分的代码的逻辑存在一些令人费解的分支，但总体思路就是直接使用最后一个残缺 Word 的密钥，按字节对应地、依次地对剩余的 1\~3 Bytes 进行解密。
 
 Part D 的代码如下所示（不必细究）：
 

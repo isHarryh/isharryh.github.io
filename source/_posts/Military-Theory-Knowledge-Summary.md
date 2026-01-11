@@ -3,7 +3,7 @@ title: 军事理论知识整理
 toc: true
 categories:
   - Politics
-tags: [政治, 笔记]
+tags: [课程, 政治]
 date: 2025-01-09 01:01:00
 updated: 2025-01-11 15:11:00
 ---

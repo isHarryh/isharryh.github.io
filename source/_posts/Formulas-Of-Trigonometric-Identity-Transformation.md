@@ -3,7 +3,7 @@ title: 三角恒等变换公式整理
 toc: true
 categories:
   - Maths
-tags: [笔记]
+tags: [数学]
 date: 2024-11-28 19:12:00
 updated: 2024-11-28 19:12:00
 ---

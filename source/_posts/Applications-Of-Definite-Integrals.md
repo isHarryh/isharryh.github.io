@@ -3,7 +3,7 @@ title: 定积分的应用
 toc: true
 categories:
   - Maths
-tags: [笔记, 微积分]
+tags: [课程, 数学]
 date: 2024-12-16 20:04:00
 updated: 2025-1-3 21:10:00
 ---

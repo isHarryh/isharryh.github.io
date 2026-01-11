@@ -3,7 +3,7 @@ title: 机器学习基础
 toc: true
 categories:
   - AI
-tags: [笔记]
+tags: [课程, 机器学习]
 date: 2024-10-19 21:42:29
 updated: 2024-10-19 21:42:29
 ---

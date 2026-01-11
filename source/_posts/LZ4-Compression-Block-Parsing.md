@@ -3,7 +3,7 @@ title: LZ4压缩算法的块数据格式解析
 toc: true
 categories:
   - CS
-tags: [数据挖掘]
+tags: [压缩, 数据挖掘, 逆向工程]
 date: 2025-04-09 20:12:00
 updated: 2025-04-09 20:12:00
 ---

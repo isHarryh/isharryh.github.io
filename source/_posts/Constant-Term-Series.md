@@ -3,7 +3,7 @@ title: 常数项级数
 toc: true
 categories:
   - Maths
-tags: [笔记, 微积分]
+tags: [课程, 数学]
 date: 2024-12-25 20:42:00
 updated: 2024-12-29 16:26:00
 ---

@@ -3,7 +3,7 @@ title: 各类积分的概念与计算
 toc: true
 categories:
   - Maths
-tags: [笔记, 微积分]
+tags: [课程, 数学]
 date: 2024-12-18 23:57:00
 updated: 2025-1-3 23:14:00
 ---

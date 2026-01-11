@@ -3,7 +3,7 @@ title: 人工智能史
 toc: true
 categories:
   - AI
-tags: [笔记]
+tags: [课程]
 date: 2024-10-13 15:06:54
 updated: 2024-10-13 15:06:54
 ---

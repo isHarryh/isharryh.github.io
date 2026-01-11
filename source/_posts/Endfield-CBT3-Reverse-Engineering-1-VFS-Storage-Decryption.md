@@ -11,6 +11,8 @@ thumbnail: /Reverse-Engineering/Endfield-CBT3-Reverse-Engineering-1-VFS-Storage-
 
 本文记录了我对 Unity 游戏[《明日方舟：终末地》](https://endfield.hypergryph.com/)（简称《终末地》）全面测试版本中的 VFS 资源存储逻辑的逆向工程过程。主要介绍了如何通过对反编译代码的静态分析，结合调试器的动态分析，解析《终末地》的 VFS 资源存储格式，并实现解析工具。
 
+<!-- more -->
+
 ## 前言
 
 ### 目标
@@ -22,8 +24,6 @@ thumbnail: /Reverse-Engineering/Endfield-CBT3-Reverse-Engineering-1-VFS-Storage-
 - 分析游戏的代码逻辑，以供学习或制作辅助工具。
 
 在“《终末地》CBT3 逆向工程”系列文章中，我们将着重分析《终末地》的**资源存储逻辑**，最终目的是实现美术、音乐资源和数值数据的提取。这里的 CBT3 指的是第三次封闭测试（Closed Beta Test 3），其内部代号是 `EndFieldTBeta2`。
-
-<!-- more -->
 
 ### 初步分析
 

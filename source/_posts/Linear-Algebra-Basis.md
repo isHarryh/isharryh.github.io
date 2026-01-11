@@ -3,7 +3,7 @@ title: 线性代数基础
 toc: true
 categories:
   - Maths
-tags: [笔记]
+tags: [课程, 数学]
 date: 2024-10-30 12:41:00
 updated: 2024-11-14 23:46:00
 ---

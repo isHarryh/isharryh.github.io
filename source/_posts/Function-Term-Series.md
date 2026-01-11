@@ -3,7 +3,7 @@ title: 函数项级数
 toc: true
 categories:
   - Maths
-tags: [笔记, 微积分]
+tags: [课程, 数学]
 date: 2024-12-26 18:02:00
 updated: 2024-12-30 21:52:00
 ---

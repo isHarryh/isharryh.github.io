@@ -3,7 +3,7 @@ title: 计算机视觉导言
 toc: true
 categories:
   - AI
-tags: [笔记, 计算机视觉]
+tags: [课程, 机器学习, 计算机视觉]
 date: 2025-08-14 20:42:00
 updated: 2025-08-16 15:03:00
 ---
