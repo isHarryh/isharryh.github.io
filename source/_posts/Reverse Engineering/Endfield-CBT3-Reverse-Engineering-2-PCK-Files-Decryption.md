@@ -17,7 +17,7 @@ thumbnail: /Reverse-Engineering/Endfield-CBT3-Reverse-Engineering-2-PCK-Files-De
 
 ### 关于 PCK 文件
 
-在上一篇文章 {% post_link Endfield-CBT3-Reverse-Engineering-1-VFS-Storage-Decryption %} 中，我们已经成功从 CHK 文件中提取出了大量资源文件，其中就包括一些 PCK 文件。
+在上一篇文章 {% post_link 《终末地》CBT3逆向工程1：VFS资源存储解密 %} 中，我们已经成功从 CHK 文件中提取出了大量资源文件，其中就包括一些 PCK 文件。
 
 **PCK 文件**是 [AudioKinetic](https://www.audiokinetic.com/) 音频技术公司（简称 Ak 公司）所开发的一种 **Wwise 音频容器**文件。PCK 指的是单词 PaCKage。
 
