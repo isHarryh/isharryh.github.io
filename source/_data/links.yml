@@ -5,6 +5,21 @@
       link: https://litwak913.github.io/
       description: ''
       avatar: https://avatars.githubusercontent.com/u/67425064
+    - name: Fridemn
+      link: https://fridemn.best/
+      description: ''
+      avatar: https://avatars.githubusercontent.com/u/150212937
+- links_category: My Organizations
+  has_thumbnail: false
+  list:
+    - name: Egooai
+      link: https://www.egooai.com/
+      description: ''
+      avatar: https://avatars.githubusercontent.com/u/193572551
+    - name: AmiLego
+      link: https://github.com/orgs/AmiLego
+      description: ''
+      avatar: https://avatars.githubusercontent.com/u/301743980
 - links_category: My Projects
   has_thumbnail: false
   list:
