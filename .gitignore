@@ -1,6 +1,7 @@
 node_modules/
 public/
 .deploy*/
+.*backup/
 
 db.json
 Thumbs.db
