@@ -9,6 +9,15 @@
       link: https://fridemn.best/
       description: ''
       avatar: https://avatars.githubusercontent.com/u/150212937
+    - name: YOO_koishi
+      link: https://blog.yookoishi.com/
+      description: ''
+      avatar: https://avatars.githubusercontent.com/u/115394813
+    - name: wdlin
+      link: https://blog.wdlin.com/
+      description: ''
+      avatar: https://avatars.githubusercontent.com/u/59403262
+
 - links_category: My Organizations
   has_thumbnail: false
   list:
@@ -20,6 +29,7 @@
       link: https://github.com/orgs/AmiLego
       description: ''
       avatar: https://avatars.githubusercontent.com/u/301743980
+
 - links_category: My Projects
   has_thumbnail: false
   list:
@@ -27,6 +37,7 @@
       link: https://arkpets.harryh.cn/?from=blog
       description: Arknights Desktop Pets
       avatar: https://ghproxy.harryh.cn/https://raw.githubusercontent.com/isHarryh/Ark-Pets/v3.x/assets/icons/icon.png
+
 - links_category: My Sponsors
   has_thumbnail: false
   list:
