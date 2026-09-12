@@ -31,7 +31,7 @@ LZ4 是使用了“固定的面向字节的编码格式”的一种 LZ77 类型�
 
 ### 序列
 
-![LZ4 Sequence](LZ4Sequence)
+![LZ4 Sequence](LZ4Sequence.png)
 
 #### 标识符
 
