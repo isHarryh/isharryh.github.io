@@ -2,7 +2,7 @@
 title: 在大型软件项目中使用AI进行编码的经验
 toc: true
 categories:
-  - SE
+  - Software Engineering
 tags: [Web开发, 项目管理, 软件工程, 智能体]
 date: 2026-09-07 11:24:00
 updated: 2026-09-07 11:24:00
