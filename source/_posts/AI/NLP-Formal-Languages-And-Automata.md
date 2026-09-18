@@ -6,6 +6,7 @@ categories:
 tags: [课程, 自然语言处理, 语言学]
 date: 2026-09-18 21:05:00
 updated: 2026-09-18 21:05:00
+thumbnail: /AI/NLP-Formal-Languages-And-Automata/Chomsky-Hierarchy.jpg
 ---
 
 本文为《自然语言处理》课程中“形式语言与自动机”一讲的整理。
