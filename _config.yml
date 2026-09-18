@@ -98,6 +98,15 @@ deploy:
 ## https://developer.mozilla.org/en-US/docs/Web/HTML/Element/meta
 meta_generator: true
 
+# Extension: Sitemap generator
+## https://github.com/hexojs/hexo-generator-sitemap
+sitemap:
+  path: [sitemap.xml]
+  template: ./source/_data/sitemap_template.xml
+  rel: true
+  tags: true
+  categories: true
+
 # Include/exclude files or folders
 ## Options only apply to the 'source/' folder
 include:
