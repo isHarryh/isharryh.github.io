@@ -10,6 +10,8 @@ updated: 2025-03-28 22:29:00
 
 本文是作者在 Ubuntu 系统上部署 Nginx 服务器的记录。
 
+<!-- more -->
+
 ## Nginx 基础
 
 ### 简介
@@ -40,8 +42,6 @@ sudo systemctl status nginx
 ### Hello World
 
 以下内容演示了如何利用 Nginx 在本地的 80 端口部署一个简易的**静态网站**。
-
-<!-- more -->
 
 首先，创建一个静态 HTML 文件：
 

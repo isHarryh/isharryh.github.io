@@ -10,13 +10,13 @@ updated: 2024-10-05 14:17:00
 
 本文是《数据与计算思维》课程的一部分。
 
+<!-- more -->
+
 ## 数据与计算思维
 
 **数据，是传达信息的集合。** 例如数值、文字、图像、音频等都是数据，能给我们传递具体的信息。
 
 > In common usage, **data is a collection of discrete or continuous values that convey information**, describing the quantity, quality, fact, statistics, other basic units of meaning, or simply sequences of symbols that may be further interpreted formally.
-
-<!-- more -->
 
 **计算思维，是指通过计算机可以做到的方式，来分析、表达和求解问题，并设计自动化的解决方案的思维能力。** 计算机不是人，计算机必须依据精确完美的程序才能执行任务。简单地说，计算思维能让我们知道怎么写程序能让计算机解决问题。
 

@@ -10,6 +10,8 @@ updated: 2025-04-09 20:12:00
 
 本文是针对 [LZ4 Block Format Description](https://github.com/lz4/lz4/blob/fa1634e2ccd41ac09c087ab65e96bcbbd003fd20/doc/lz4_Block_format.md) 的部分内容的翻译和综述，解释了 LZ4 压缩算法的块数据的格式规定。
 
+<!--more-->
+
 ## 前言
 
 LZ4 是使用了“固定的面向字节的编码格式”的一种 LZ77 类型的压缩算法。本文介绍的是块数据（Block）的格式规定，不涉及熵编码器（Entropy Encoder）和成帧层（Framing Layer），也不涉及压缩或解压算法的具体实现。
@@ -22,8 +24,6 @@ LZ4 是使用了“固定的面向字节的编码格式”的一种 LZ77 类型�
 - 标志符（Token）是序列最开头的 1 Byte。
 - 偏移量（Offset）是匹配复制操作中定位“先前出现过的字面量”的依据。
 - 匹配长度（Match Length）是匹配复制操作中需要复制的字面量的长度。
-
-<!--more-->
 
 ## 格式描述
 

@@ -10,6 +10,8 @@ updated: 2025-07-11 22:28:00
 
 本文是作者在 Ubuntu 系统上配置 zsh 和 Oh My Zsh 的记录。
 
+<!--more-->
+
 ## 为什么需要
 
 [zsh](https://www.zsh.org) 是一个功能强大的 Shell，提供了比 bash 更丰富的功能和更好的交互体验。
@@ -26,8 +28,6 @@ updated: 2025-07-11 22:28:00
 sudo apt update
 sudo apt install zsh -y
 ```
-
-<!--more-->
 
 对于其他操作系统，也有各自的安装方法，在此不一一列举。
 
