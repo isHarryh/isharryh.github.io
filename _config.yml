@@ -98,6 +98,17 @@ deploy:
 ## https://developer.mozilla.org/en-US/docs/Web/HTML/Element/meta
 meta_generator: true
 
+# Extension: RSS feed generator
+## https://github.com/hexojs/hexo-generator-feed
+feed:
+  enable: true
+  type: atom
+  path: atom.xml
+  limit: 20
+  content: false
+  order_by: -date
+  autodiscovery: true
+
 # Extension: Sitemap generator
 ## https://github.com/hexojs/hexo-generator-sitemap
 sitemap:
